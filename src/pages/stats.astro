@@ -1,0 +1,33 @@
+---
+import Layout from "../layout/Layout.astro";
+import sql from "../lib/db";
+
+const categories =
+  await sql`select expenses.categoryid, category.name, sum(price) total
+from expenses
+  join category
+    on expenses.categoryid = category.id
+where to_char(purchaseDate, 'YYYY-MM') = to_char(current_date, 'YYYY-MM')
+group by 1, 2
+order by 3 desc`;
+
+const total = categories.reduce(function (prev, category) {
+  return prev + parseInt(category.total);
+}, 0);
+---
+
+<Layout>
+  <section class="px-2 mt-6">
+    <h2 class="font-semibold">Total - {total}</h2>
+    <div>
+      {
+        categories.map((category) => (
+          <div class="flex justify-between w-96 my-4 bg-slate-300 p-2">
+            <p>{category.name}</p>
+            <p>{category.total}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

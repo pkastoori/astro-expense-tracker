@@ -1,0 +1,10 @@
+---
+import sql from "../lib/db.js";
+
+const categoryId = Astro.url.searchParams.get("category");
+
+const items =
+  await sql`select id, name from items where categoryid = ${categoryId} order by name`;
+---
+
+{items.map((item) => <option value={item.name}>{item.name}</option>)}

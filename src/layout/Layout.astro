@@ -1,0 +1,36 @@
+---
+import "@fontsource/fira-sans";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.4"
+      integrity="sha384-zUfuhFKKZCbHTY6aRR46gxiqszMk5tcHjsVFxnUo8VMus4kHGVdIYVbOYYNlKmHV"
+      crossorigin="anonymous"></script>
+
+    <title>Expense Tracker</title>
+  </head>
+  <body>
+    <main class="container mx-auto">
+      <nav class="p-2 bg-slate-200">
+        <ul class="flex space-x-8">
+          <li><a href="/">Home</a></li>
+          <li><a href="/search">Search</a></li>
+          <li><a href="/stats">Stats</a></li>
+        </ul>
+      </nav>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    font-family: "Fira Sans";
+  }
+</style>
