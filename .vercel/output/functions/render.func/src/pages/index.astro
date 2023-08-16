@@ -1,0 +1,76 @@
+---
+import Layout from "../layout/Layout.astro";
+import sql from "../lib/db.js";
+
+const categories = await sql`select id, name from category`;
+const items =
+  await sql`select id, name from items where categoryid = '10ba5860-f9bb-493e-98be-cb7ed9c7b0ea' order by name`;
+---
+
+<Layout>
+  <form
+    hx-post="/add"
+    hx-target="#result"
+    hx-swap="beforeend"
+    class="flex flex-col space-y-4 mt-4 px-2"
+  >
+    <div class="flex space-x-4">
+      <label class="w-40">Purchase Date</label>
+      <input
+        type="date"
+        name="purchaseDate"
+        class="focus:outline-none border w-60 p-1"
+        value={new Date().toISOString().substring(0, 10)}
+      />
+    </div>
+    <div class="flex space-x-4">
+      <label class="w-40">Category</label>
+      <select
+        name="category"
+        class="focus:outline-none border w-60 p-1"
+        hx-get="/fetch-items"
+        hx-target="#items"
+        hx-swap="innerHTML"
+      >
+        {categories.map((cat) => <option value={cat.id}>{cat.name}</option>)}
+      </select>
+    </div>
+    <div class="flex space-x-4">
+      <label class="w-40">Name</label>
+      <select name="name" id="items" class="focus:outline-none border w-60 p-1">
+        {items.map((item) => <option value={item.name}>{item.name}</option>)}
+      </select>
+    </div>
+    <div id="complete" class="space-y-4">
+      <div class="flex space-x-4">
+        <label class="w-40">Quantity</label>
+        <input
+          name="quantity"
+          type="text"
+          class="focus:outline-none border w-60 p-1"
+        />
+      </div>
+      <div class="flex space-x-4">
+        <label class="w-40">Price</label>
+        <input
+          name="price"
+          type="number"
+          class="focus:outline-none border w-60 p-1"
+        />
+      </div>
+
+      <div class="flex space-x-4">
+        <label class="w-40">Comments</label>
+        <input
+          name="comments"
+          type="text"
+          class="focus:outline-none border w-60 p-1"
+        />
+      </div>
+    </div>
+    <button class="p-2 bg-blue-400 w-48">Submit</button>
+  </form>
+
+  <div id="result" class="grid grid-cols-2 md:grid-cols-6 mt-6 px-2 gap-4">
+  </div>
+</Layout>

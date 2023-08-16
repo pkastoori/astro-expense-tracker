@@ -1,0 +1,30 @@
+---
+import sql from "../lib/db";
+
+const data = Object.fromEntries(await Astro.request.formData());
+
+const response =
+  await sql`insert into expenses (categoryid, name, quantity, price, purchaseDate, comments) 
+                            values (${data.category}, ${data.name}, ${data.quantity}, ${data.price}, ${data.purchaseDate}, ${data.comments})`;
+---
+
+<div id="complete" hx-swap-oob="true" class="space-y-4">
+  <div class="flex space-x-4">
+    <label class="w-40">Quantity</label>
+    <input name="quantity" type="text" class="focus:outline-none border w-60" />
+  </div>
+  <div class="flex space-x-4">
+    <label class="w-40">Price</label>
+    <input name="price" type="number" class="focus:outline-none border w-60" />
+  </div>
+  <div class="flex space-x-4">
+    <label class="w-40">Comments</label>
+    <input name="comments" type="text" class="focus:outline-none border w-60" />
+  </div>
+</div>
+
+<div class="bg-slate-200 flex flex-col gap-2 p-2">
+  <p>Name: {data.name}</p>
+  <p>Quantity: {data.quantity}</p>
+  <p>Price: {data.price}</p>
+</div>
